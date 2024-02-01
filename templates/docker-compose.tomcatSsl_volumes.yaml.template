@@ -1,0 +1,8 @@
+            # ERDDAP HTTPS certificate file
+            - type: bind
+              source: ph_ERDDAP_TomcatSsl_CertPath
+              target: /usr/local/tomcat/conf/ph_KEYSTORE_FILENAME
+            # ERDDAP Tomcat server.sslconnetor.xml
+            - type: bind
+              source: ph_MYDOCKER_ERDDAP_TOMCAT_SERVER_XML
+              target: /usr/local/tomcat/conf/server.sslconnetor.xml

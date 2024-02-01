@@ -1,0 +1,9 @@
+ErddapSelfCert123!
+
+Info selfsigned certificate:
+CN=erddap-self.localhost
+Alias=erddap-self.localhost
+Type=x509
+ENC=sha256
+DAYS=36500
+KEYTYPE=rsa_2048

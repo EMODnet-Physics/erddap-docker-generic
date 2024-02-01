@@ -1,0 +1,5 @@
+    if [ ! -e ${CATALINA_HOME}/conf/sslconnectoradded.txt ]
+    then
+        sed -i -e "/<Service name=\"Catalina\">/r ${CATALINA_HOME}/conf/server.sslconnetor.xml" ${CATALINA_HOME}/conf/server.xml
+        touch ${CATALINA_HOME}/conf/sslconnectoradded.txt
+    fi

@@ -39,8 +39,8 @@ WARNING: This script doesn't do any check of the variables content. So be carefu
 5. OPTIONAL - Change the docker image in `templates/docker-compose.yaml.template`. Now is set to `axiom/docker-erddap:2.23-jdk17-openjdk`
     * NOTE - From ERDDAP 2.20 it use Tomcat 10. So we have changed the SSL connector. If you plan to use an ERDDAP image below 2.20 version, you have to change also the Tomcat SSL connector. This is explained in dedicated chapter.
     * NOTE - ERDDAP Content - After the first deploy, also remember ti change the content of the folder `${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content` with the file from the compressed file given by the ERDDAP maintainer. You can find them in the `data/erddap` directory of this repository or on their site: `https://coastwatch.pfeg.noaa.gov/erddap/download/setup.html`
-6. Give the permissions *Execute* (chmod +x) to `docker-Erddap-SetupEnvironment.s` file.
-7. Run `docker-Erddap-SetupEnvironment.s` and follow instruction on terminal.
+6. Give the permissions *Execute* (chmod +x) to `docker-Erddap-SetupEnvironment.sh` file.
+7. Run `docker-Erddap-SetupEnvironment.sh` and follow instruction on terminal.
 
 ## NOTE
 ### To execute GenerateDatasetsXml

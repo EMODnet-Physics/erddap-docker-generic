@@ -55,7 +55,7 @@ ERDDAP_adminCity="GENOVA"
 ERDDAP_adminStateOrProvince="GE"
 ERDDAP_adminPostalCode="16154"
 ERDDAP_adminCountry="ITALY"
-ERDDAP_adminemail="ricerca.innovazione.ett@ettsolutions.com"
+ERDDAP_adminEmail="ricerca.innovazione.ett@ettsolutions.com"
 ERDDAP_flagKeyKey="CHANGE ME!"
 # OPTIONAL - Set ERDDAP mail parameters
 # This enable (1) or disable (0) the mail parameters configuration

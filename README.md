@@ -48,15 +48,6 @@ docker exec -it erddap-docker_erddap_1 bash -c "cd webapps/erddap/WEB-INF/ && ba
 
 In the docker image the `MYDOCKER_DATA_DIR` is mounted in the `/Data/` path
 
-### OS other than CentOS
-#### SELinux
-For OS that doesn't have se SELinux, from `docker-EnvCreation.sh` remove the lines 
-
-    # Only fot RedHat-like distribution - Set direcotries context
-    semanage fcontext -a -t container_file_t "${MYDOCKER_ROOT_DIR}/opt/customdocker/customvolumes(/.*)?"
-    semanage fcontext -a -t container_share_t "${MYDOCKER_ROOT_DIR}/opt/customdocker/deployfiles(/.*)?"
-    restorecon -RF ${MYDOCKER_ROOT_DIR}/opt/customdocker
-
 #### Change Tomcat SSL connector 
 From Tomcat 10 some SSL connector parameters are changed. So we have changed the configuration file in `data/tomcat/server.sslconnetor.xml` accordingly.
 The old configuration is in the file `data/tomcat/server.sslconnetor.tomcat8.xml`.

@@ -101,49 +101,83 @@ echo DONE!
 echo Set ERDDAP container content values...
 # Extract default ERDDAP Content folder (orgin: https://coastwatch.pfeg.noaa.gov/erddap/download/setup.html#initialSetup - https://github.com/BobSimons/erddap/releases/download/v2.12/Content.zip)
 #tar xzf ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/data/erddap/content.erddap_v214.tar.gz -C ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content
-tar xzf ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/data/erddap/content.erddap_v223.tar.gz -C ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content
+
+wget https://github.com/ERDDAP/erddapContent/releases/download/content1.0.1/erddapContent.zip -O erddapContent.zip
+unzip -p erddapContent.zip content/erddap/setup.xml > ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
+unzip -p erddapContent.zip content/erddap/datasets.xml > ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/datasets.xml
+mkdir  ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content//images
+unzip -p erddapContent.zip content/erddap/images/erddapStart2.css > ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/images/erddapStart2.css
 chown -R ${HOST_ERDDAP_Tomcat_user}:${HOST_ERDDAP_Tomcat_user} ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/*
-# For ERDDAP version < 2.12
-# Set ERDDAP docker environment variable
-sed -i "s@<bigParentDirectory>/home/yourName/erddap/</bigParentDirectory>@<bigParentDirectory>${ERDDAP_bigParentDirectory}</bigParentDirectory>@g" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<baseUrl>http://localhost:8080</baseUrl>@<baseUrl>${ERDDAP_baseUrl}</baseUrl>@g" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<baseHttpsUrl></baseHttpsUrl>@<baseHttpsUrl>${ERDDAP_baseHttpsUrl}</baseHttpsUrl>@g" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s|<emailEverythingTo>your.email@yourInstitution.edu</emailEverythingTo>|<emailEverythingTo>${ERDDAP_emailEverythingTo}</emailEverythingTo>|g" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<adminInstitution>Your Institution</adminInstitution>@<adminInstitution>${ERDDAP_adminInstitution}</adminInstitution>@" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<adminInstitutionUrl>Your Institution's or Group's Url</adminInstitutionUrl>@<adminInstitutionUrl>${ERDDAP_adminInstitutionUrl}</adminInstitutionUrl>@" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<adminIndividualName>Your Name</adminIndividualName>@<adminIndividualName>${ERDDAP_adminIndividualName}</adminIndividualName>@" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<adminPosition>ERDDAP administrator</adminPosition>@<adminPosition>${ERDDAP_adminPosition}</adminPosition>@" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<adminPhone>+1 999-999-9999</adminPhone>@<adminPhone>${ERDDAP_adminPhone}</adminPhone>@" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<adminAddress>123 Main St.</adminAddress>@<adminAddress>${ERDDAP_adminAddress}</adminAddress>@" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<adminCity>Some Town</adminCity>@<adminCity>${ERDDAP_adminCity}</adminCity>@" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<adminStateOrProvince>CA</adminStateOrProvince>@<adminStateOrProvince>${ERDDAP_adminStateOrProvince}</adminStateOrProvince>@" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<adminPostalCode>99999</adminPostalCode>@<adminPostalCode>${ERDDAP_adminPostalCode}</adminPostalCode>@" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<adminCountry>USA</adminCountry>@<adminCountry>${ERDDAP_adminCountry}</adminCountry>@" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s|<adminEmail>your.email@yourCompany.com</adminEmail>|<adminEmail>${ERDDAP_adminemail}</adminEmail>|" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-sed -i "s@<flagKeyKey>CHANGE THIS TO YOUR FAVORITE QUOTE</flagKeyKey>@<flagKeyKey>${ERDDAP_flagKeyKey}</flagKeyKey>@" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
 
-if [ $ERDDAP_SetMailParameters -eq 1 ]; then
-    sed -i "s|<emailFromAddress>your.email@yourCompany.com</emailFromAddress>|<emailFromAddress>${ERDDAP_emailFromAddress}</emailFromAddress>|" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-    sed -i "s|<emailUserName>your.email@yourCompany.com</emailUserName>|<emailUserName>${ERDDAP_emailUserName}</emailUserName>|" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-    sed -i "s|<emailPassword>yourPassword</emailPassword>@<emailPassword>${ERDDAP_emailPassword}</emailPassword>|" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-    sed -i "s|<emailProperties></emailProperties>|<emailProperties>${ERDDAP_emailProperties}</emailProperties>|" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-    sed -i "s|<emailSmtpHost>your.smtp.host.edu</emailSmtpHost>|<emailSmtpHost>${ERDDAP_emailSmtpHost}</emailSmtpHost>|" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-    sed -i "s|<emailSmtpPort>25</emailSmtpPort>|<emailSmtpPort>${ERDDAP_emailSmtpPort}</emailSmtpPort>|" ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml
-else
-    echo "The ERDDAP mail parameters will be not configured, as you specified (ERDDAP_SetMailParameters=$ERDDAP_SetMailParameters)."
-fi
-
-echo "ERDDAP_MIN_MEMORY=\"${ERDDAP_MIN_MEMORY}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
-echo "ERDDAP_MAX_MEMORY=\"${ERDDAP_MAX_MEMORY}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
-# For ERDDAP version >= 2.14
 # Set ERDDAP docker environment variable
 echo "Setup ERDDAP_* Environment variables for custom configurations..."
 echo "" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
 echo "# ERDDAP VARIABLES" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
-echo "ERDDAP_bigParentDirectory=\"${ERDDAP_bigParentDirectory}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+sed -i "s@ph_ERDDAP_MIN_MEMORY@${ERDDAP_MIN_MEMORY}@g" ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+sed -i "s@ph_ERDDAP_MAX_MEMORY@${ERDDAP_MAX_MEMORY}@g" ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_MIN_MEMORY=\"${ERDDAP_MIN_MEMORY}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_MAX_MEMORY=\"${ERDDAP_MAX_MEMORY}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
 echo "ERDDAP_baseUrl=\"${ERDDAP_baseUrl}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
 echo "ERDDAP_baseHttpsUrl=\"${ERDDAP_baseHttpsUrl}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_flagKeyKey=\"${ERDDAP_flagKeyKey}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
 echo "ERDDAP_emailEverythingTo=\"${ERDDAP_emailEverythingTo}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_emailDailyReportsTo=\"${ERDDAP_emailDailyReportsTo}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_emailFromAddress=\"${ERDDAP_emailFromAddress}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_emailUserName=\"${ERDDAP_emailUserName}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_emailPassword=\"${ERDDAP_emailPassword}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_emailSmtpHost=\"${ERDDAP_emailSmtpHost}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_emailSmtpPort=\"${ERDDAP_emailSmtpPort}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_adminInstitution=\"${ERDDAP_adminInstitution}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_adminInstitutionUrl=\"${ERDDAP_adminInstitutionUrl}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_adminIndividualName=\"${ERDDAP_adminIndividualName}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_adminPosition=\"${ERDDAP_adminPosition}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_adminPhone=\"${ERDDAP_adminPhone}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_adminAddress=\"${ERDDAP_adminAddress}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_adminCity=\"${ERDDAP_adminCity}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_adminStateOrProvince=\"${ERDDAP_adminStateOrProvince}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_adminPostalCode=\"${ERDDAP_adminPostalCode}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_adminCountry=\"${ERDDAP_adminCountry}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_adminEmail=\"${ERDDAP_adminEmail}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_subscribeToRemoteErddapDataset=\"${ERDDAP_subscribeToRemoteErddapDataset}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_fontFamily=\"${ERDDAP_fontFamily}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_logMaxSizeMB=\"${ERDDAP_logMaxSizeMB}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_datasetsRegex=\"${ERDDAP_datasetsRegex}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_quickRestart=\"${ERDDAP_quickRestart}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_authentication=\"${ERDDAP_authentication}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_googleClientID=\"${ERDDAP_googleClientID}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_orcidClientID=\"${ERDDAP_orcidClientID}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_orcidClientSecret=\"${ERDDAP_orcidClientSecret}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_passwordEncoding=\"${ERDDAP_passwordEncoding}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_listPrivateDatasets=\"${ERDDAP_listPrivateDatasets}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_searchEngine=\"${ERDDAP_searchEngine}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_accessConstraints=\"${ERDDAP_accessConstraints}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_accessRequiresAuthorization=\"${ERDDAP_accessRequiresAuthorization}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_fees=\"${ERDDAP_fees}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_keywords=\"${ERDDAP_keywords}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_units_standard=\"${ERDDAP_units_standard}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_fgdcActive=\"${ERDDAP_fgdcActive}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_iso19115Active=\"${ERDDAP_iso19115Active}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_filesActive=\"${ERDDAP_filesActive}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_defaultAccessibleViaFiles=\"${ERDDAP_defaultAccessibleViaFiles}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_dataProviderFormActive=\"${ERDDAP_dataProviderFormActive}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_subscriptionSystemActive=\"${ERDDAP_subscriptionSystemActive}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_convertersActive=\"${ERDDAP_convertersActive}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_slideSorterActive=\"${ERDDAP_slideSorterActive}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_highResLogoImageFile=\"${ERDDAP_highResLogoImageFile}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_lowResLogoImageFile=\"${ERDDAP_lowResLogoImageFile}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_googleEarthLogoFile=\"${ERDDAP_googleEarthLogoFile}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_variablesMustHaveIoosCategory=\"${ERDDAP_variablesMustHaveIoosCategory}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_categoryAttributes=\"${ERDDAP_categoryAttributes}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_useSharedWatchService=\"${ERDDAP_useSharedWatchService}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_useSaxParser=\"${ERDDAP_useSaxParser}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_cacheClearMinute=\"${ERDDAP_cacheClearMinutes}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_useHeadersForUrl=\"${ERDDAP_useHeadersForUrl}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_useSisISO19115=\"${ERDDAP_useSisISO19115}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_updateSubsRssOnFileChanges=\"${ERDDAP_updateSubsRssOnFileChanges}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_includeNcCFSubsetVariables=\"${ERDDAP_includeNcCFSubsetVariables}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_redirectDocumentationToGitHubIo=\"${ERDDAP_redirectDocumentationToGitHubIo}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+echo "ERDDAP_showLoadErrorsOnStatusPage=\"${ERDDAP_showLoadErrorsOnStatusPage}\"" >> ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env
+
 echo "DONE!"
 
 # If ERDDAP_enableTomcatSsl is equal to 1, we setup the Tomcat bind to server.sslconnetor.xml and the certificate
@@ -164,6 +198,7 @@ echo DONE!
 echo Set the docker-compose files parameters...
 ## ERDDAP ##
 cp ${ERDDAP_DEPLOYROOTSCRIPT}/templates/docker-compose.yaml.template ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/erddap-docker/docker-compose.yaml
+sed -i "s@ph_ERDDAP_VERSION@${ERDDAP_VERSION}@g" ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/erddap-docker/docker-compose.yaml
 sed -i "s@ph_ERDDAP_Container_Name@${ERDDAP_Container_Name}@g" ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/erddap-docker/docker-compose.yaml
 sed -i "s@ph_MYDOCKER_ERDDAP_HOST_PORT@${MYDOCKER_ERDDAP_HOST_PORT}@g" ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/erddap-docker/docker-compose.yaml
 sed -i "s@ph_MYDOCKER_ERDDAP_ENVIRONMENT_FILE@${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/environments/erddap-compose.env@g" ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/erddap-docker/docker-compose.yaml
@@ -213,13 +248,4 @@ fi
 chown ${HOST_ERDDAP_Tomcat_user}:${HOST_ERDDAP_Tomcat_user} ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/entrypoints/erddap_entrypoint.sh
 chmod 775 ${MYDOCKER_ROOT_DIR}/erddap-docker/deployfiles/entrypoints/erddap_entrypoint.sh
 echo DONE!
-### ###
-
-### ERDDAP Reminder for password configuration ###
-if [ $ERDDAP_SetMailParameters -eq 1 ]; then
-    if [ -z "$MYDOCKER_GEONETWORK_IMAGE" ]
-    then
-        echo "!!! Remember to set the ERDDAP SMTP password in the ${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content/setup.xml file."
-    fi
-fi
 ### ###

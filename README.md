@@ -25,8 +25,8 @@ WARNING: This script doesn't do any check of the variables content. So be carefu
 ## HOW TO USE
 1. Login as *root* user.
 2. Copy al the content from this repository in any folder of the host. For example `/root/deploy`. 
-3. Enter in the directory with the `docker-Erddap-SetupEnvironment.sh` file.
-4. Customize the configuration in the `docker-Erddap-SetupEnvVariable.sh` file. The minimal changes you have to do are:
+3. Enter in the directory with the `docker-EnvCreation.sh` file.
+4. Customize the configuration in the `docker-EnvCreationVariable.sh` and `docker-EnvCreationVariableNcwms.sh` files. The minimal changes you have to do are:
     1. `HOST_ERDDAP_DATA_*`
     2. `HOST_ERDDAP_Tomcat_*`
     3. `MYDOCKER_ROOT_DIR`
@@ -39,14 +39,23 @@ WARNING: This script doesn't do any check of the variables content. So be carefu
 5. OPTIONAL - Change the docker image in `templates/docker-compose.yaml.template`. Now is set to `axiom/docker-erddap:2.23-jdk17-openjdk`
     * NOTE - From ERDDAP 2.20 it use Tomcat 10. So we have changed the SSL connector. If you plan to use an ERDDAP image below 2.20 version, you have to change also the Tomcat SSL connector. This is explained in dedicated chapter.
     * NOTE - ERDDAP Content - After the first deploy, also remember ti change the content of the folder `${MYDOCKER_ROOT_DIR}/erddap-docker/volumes/Content` with the file from the compressed file given by the ERDDAP maintainer. You can find them in the `data/erddap` directory of this repository or on their site: `https://coastwatch.pfeg.noaa.gov/erddap/download/setup.html`
-6. Give the permissions *Execute* (chmod +x) to `docker-Erddap-SetupEnvironment.sh` file.
-7. Run `docker-Erddap-SetupEnvironment.sh` and follow instruction on terminal.
+6. Give the permissions *Execute* (chmod +x) to `docker-EnvCreation.sh` file.
+7. Run `docker-EnvCreation.sh` and follow instruction on terminal.
 
 ## NOTE
 ### To execute GenerateDatasetsXml
 docker exec -it erddap-docker_erddap_1 bash -c "cd webapps/erddap/WEB-INF/ && bash GenerateDatasetsXml.sh -verbose"
 
 In the docker image the `MYDOCKER_DATA_DIR` is mounted in the `/Data/` path
+
+### OS other than CentOS
+#### SELinux
+For OS that doesn't have se SELinux, from `docker-EnvCreation.sh` remove the lines 
+
+    # Only fot RedHat-like distribution - Set direcotries context
+    semanage fcontext -a -t container_file_t "${MYDOCKER_ROOT_DIR}/opt/customdocker/customvolumes(/.*)?"
+    semanage fcontext -a -t container_share_t "${MYDOCKER_ROOT_DIR}/opt/customdocker/deployfiles(/.*)?"
+    restorecon -RF ${MYDOCKER_ROOT_DIR}/opt/customdocker
 
 #### Change Tomcat SSL connector 
 From Tomcat 10 some SSL connector parameters are changed. So we have changed the configuration file in `data/tomcat/server.sslconnetor.xml` accordingly.

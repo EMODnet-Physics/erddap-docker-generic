@@ -2,7 +2,7 @@ version: '3.3'
 services:
     # ERDDAP container
     erddap:
-        image: axiom/docker-erddap:2.23-jdk17-openjdk
+        image: erddap/erddap:vph_ERDDAP_VERSION
         container_name: "ph_ERDDAP_Container_Name"
         ports:
             - "ph_MYDOCKER_ERDDAP_HOST_PORT:8080"

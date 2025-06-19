@@ -9,7 +9,7 @@ if [ "$1" = 'start-tomcat.sh' ] || [ "$1" = 'catalina.sh' ]; then
     ###
     # ETT Custom user
     groupadd --gid ph_HOST_ERDDAP_DATA_user_gid ph_HOST_ERDDAP_DATA_user_group && \
-        useradd -u ph_HOST_ERDDAP_DATA_user_uid -g ph_HOST_ERDDAP_DATA_user_group -s /bin/bash ph_HOST_ERDDAP_DATA_user
+    useradd -u ph_HOST_ERDDAP_DATA_user_uid -g ph_HOST_ERDDAP_DATA_user_group -s /bin/bash ph_HOST_ERDDAP_DATA_user
     ###
 
     USER_ID=${TOMCAT_USER_ID:-1000}
@@ -48,7 +48,25 @@ if [ "$1" = 'start-tomcat.sh' ] || [ "$1" = 'catalina.sh' ]; then
     usermod -a -G ph_HOST_ERDDAP_DATA_user_group tomcat
     ###
     
-    exec gosu tomcat "$@"
+    ###
+    # Run executables/shell scripts in /init.d on each container startup
+    # Inspired by postgres' /docker-entrypoint-initdb.d
+    # https://github.com/docker-library/docs/blob/master/postgres/README.md#initialization-scripts
+    # https://github.com/docker-library/postgres/blob/master/docker-entrypoint.sh#L156
+    ###
+    if [ -d "/init.d" ]; then
+      for f in /init.d/*; do
+        if [ -x "$f" ]; then
+          echo "Executing $f"
+          "$f"
+        elif [[ $f == *.sh ]]; then
+          echo "Sourcing $f (not executable)"
+          . "$f"
+        fi
+      done
+    fi
+
+    exec setpriv --reuid $USER_ID --regid $GROUP_ID --init-groups "$@"
 fi
 
 exec "$@"

@@ -1,3 +1,6 @@
+#This is the ERDDAP version to install
+ERDDAP_VERSION="2.27.0"
+
 ### HOST VARIABLES
 # This is the user used by ERDDAP to access the MYDOCKER_DATA_DIR
 HOST_ERDDAP_DATA_user="usrerddap"
@@ -13,9 +16,9 @@ HOST_ERDDAP_Tomcat_user_gid="2001"
 
 ### DOCKER
 # this folder where are created all the deployment directories.
-MYDOCKER_ROOT_DIR="/opt/data00/customdocker"
+MYDOCKER_ROOT_DIR="/mnt/c/opt/data00/customdocker"
 # this is folder where you put external data accessible by ERDDAP
-MYDOCKER_EXT_DATA_DIR="/opt/data00/appdata"
+MYDOCKER_EXT_DATA_DIR="/mnt/c/opt/data00/appdata"
 # this is the port used by the container
 MYDOCKER_ERDDAP_HOST_PORT="12081"
 # this is the port used by the container if you enable SSL in the variables below
@@ -37,37 +40,76 @@ ERDDAP_Container_Name="erddap-ett"
 ERDDAP_enableTomcatSsl=1
 ## You must supply a PFX cert store
 ## Set the path to the certificate - Here we set a selfsigned certificate that is in erddap/data/erddap/ssl.
-ERDDAP_TomcatSsl_CertPath="erddap/data/erddap/ssl/erddap-self.localhost_2122.pfx"
+ERDDAP_TomcatSsl_CertPath="data/erddap/ssl/erddap-self.localhost_2122.pfx"
 ## Set the certificate store type. You have to specify the certificate algorithm. NOT the certificate\keystore type (JKS or PCK12).
 ERDDAP_TomcatSsl_CertType="RSA"
 ## Set the certificate store password - NOT USE @ in the password
 ERDDAP_TomcatSsl_CertPassword="ErddapSelfCert123!"
-##
-# CHANGE THE FOLLOWING VARIABLES
-ERDDAP_emailEverythingTo="asd@asd.com"
-ERDDAP_adminInstitution="ETT S.p.A. - People and Technology"
-ERDDAP_adminInstitutionUrl="https://www.ettsolutions.com/"
-ERDDAP_adminIndividualName="ETT Ricerca"
-ERDDAP_adminPosition="ERDDAP administrator"
-ERDDAP_adminPhone="+39 010 6519116"
-ERDDAP_adminAddress="Via Sestri 37"
-ERDDAP_adminCity="GENOVA"
-ERDDAP_adminStateOrProvince="GE"
-ERDDAP_adminPostalCode="16154"
-ERDDAP_adminCountry="ITALY"
-ERDDAP_adminEmail="ricerca.innovazione.ett@ettsolutions.com"
-ERDDAP_flagKeyKey="CHANGE ME!"
-# OPTIONAL - Set ERDDAP mail parameters
-# This enable (1) or disable (0) the mail parameters configuration
-ERDDAP_SetMailParameters=0
-ERDDAP_emailFromAddress=""
-ERDDAP_emailUserName=""
-# If you use the '|' in the password, than leave the variable blank and set the parameters when the configuration is finished.
-ERDDAP_emailPassword=""
-ERDDAP_emailProperties=""
-ERDDAP_emailSmtpHost=""
-ERDDAP_emailSmtpPort=""
-# these variables set the minimum and maximum memory available in ERDDAP, set by default at 4 GigaBytes
-ERDDAP_MIN_MEMORY="4G"
-ERDDAP_MAX_MEMORY="4G"
-###
+
+
+#######CHANGE AS NEEDED
+#JAVA MEMORY CONFIGURATION
+ERDDAP_MIN_MEMORY=1G 
+ERDDAP_MAX_MEMORY=4G
+###CONFIGURATION WITH DEFAULT VALUES
+#change ERDDAP_baseUrl and ERDDAP_baseHttpsUrl to your ERDDAP server's URL
+ERDDAP_baseUrl='http://localhost:12081'
+ERDDAP_baseHttpsUrl=''
+ERDDAP_flagKeyKey='flagKeyKey put any string you want here'
+ERDDAP_emailEverythingTo='changethisto@youremailaddress.com'
+ERDDAP_emailDailyReportsTo=''
+ERDDAP_emailFromAddress='change this to your email address'
+ERDDAP_emailUserName='change this to your email user name'
+ERDDAP_emailPassword='change this to your email password'
+ERDDAP_emailSmtpHost='change this to your email smtp host'
+ERDDAP_emailSmtpPort='change this to your email smtp port'
+ERDDAP_adminInstitution='change this to your institution name'
+ERDDAP_adminInstitutionUrl='http://changethisto.yourinstitutionurl.com'
+ERDDAP_adminIndividualName='change this to your name'
+ERDDAP_adminPosition='change this to your position'
+ERDDAP_adminPhone='change this to your phone number'
+ERDDAP_adminAddress='change this to your address'
+ERDDAP_adminCity='change this to your city'
+ERDDAP_adminStateOrProvince='change this to your state or province'
+ERDDAP_adminPostalCode='change this to your postal code'
+ERDDAP_adminCountry='change this to your country'
+ERDDAP_adminEmail='changethisto@youremailaddress.com'
+ERDDAP_subscribeToRemoteErddapDataset='true'
+ERDDAP_fontFamily='DejaVu Sans'
+ERDDAP_logMaxSizeMB='20'
+ERDDAP_datasetsRegex='.*'
+ERDDAP_quickRestart='true'
+ERDDAP_authentication=''
+ERDDAP_googleClientID=''
+ERDDAP_orcidClientID=''
+ERDDAP_orcidClientSecret=''
+ERDDAP_passwordEncoding='UEPSHA256'
+ERDDAP_listPrivateDatasets='false'
+ERDDAP_searchEngine='original'
+ERDDAP_accessConstraints='NONE'
+ERDDAP_accessRequiresAuthorization='only accessible to authorized users'
+ERDDAP_fees='NONE'
+ERDDAP_keywords='earth science, atmosphere, ocean, biosphere, biology, environment'
+ERDDAP_units_standard='UDUNITS'
+ERDDAP_fgdcActive='true'
+ERDDAP_iso19115Active='true'
+ERDDAP_filesActive='true'
+ERDDAP_defaultAccessibleViaFiles='true'
+ERDDAP_dataProviderFormActive='true'
+ERDDAP_subscriptionSystemActive='true'
+ERDDAP_convertersActive='true'
+ERDDAP_slideSorterActive='true'
+ERDDAP_highResLogoImageFile='noaa_simple.gif'
+ERDDAP_lowResLogoImageFile='noaa20.gif'
+ERDDAP_googleEarthLogoFile='nlogo.gif'
+ERDDAP_variablesMustHaveIoosCategory='false'
+ERDDAP_categoryAttributes='global:cdm_data_type, global:institution, ioos_category, global:keywords, long_name, standard_name, variableName'
+ERDDAP_useSharedWatchService='true'
+ERDDAP_useSaxParser='true'
+ERDDAP_cacheClearMinutes='15'
+ERDDAP_useHeadersForUrl='true'
+ERDDAP_useSisISO19115='true'
+ERDDAP_updateSubsRssOnFileChanges='true'
+ERDDAP_includeNcCFSubsetVariables='false'
+ERDDAP_redirectDocumentationToGitHubIo='true'
+ERDDAP_showLoadErrorsOnStatusPage='true'

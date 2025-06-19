@@ -2,7 +2,7 @@
 You can deploy the basic structure of environment using the script `docker-Erddap-SetupEnvVariable.sh`.  
 The enviroment created contains: 
 
-* docker-compose - ERDDAP image set is axiom/docker-erddap:2.23-jdk17-openjdk  
+* docker-compose - ERDDAP image set is erddap/erddap:v2.27.0 
 * ERDDAP container - Exposed on port set with the variable `MYDOCKER_ERDDAP_HOST_PORT`. Now it's set to 12081. Evantually also the `MYDOCKER_ERDDAP_HOST_PORT_SSL`.
 * ext data directory - This directory on the host could have data that will be accessible from the ERDDAP container.
 * ERDDAP Data directory - This is the directory on the host where are ERDDAP Data files (cache, logs, etc...).
